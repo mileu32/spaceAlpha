@@ -79,21 +79,30 @@ def addAstro(event):
     
 
 def selectAstro(event):
-    '''
     for i in astro:
-            if(i.locationX+changedX+<event.
-    '''
+        if i.isSelected:
+            i.disSelect()
+    
+    for i in astro:
+            if (i.locationX+changedX+i.radius/2+4)>event.x and (i.locationX+changedX-i.radius/2-4)<event.x and (i.locationY+changedY+i.radius/2+4)>event.y and (i.locationY+changedY-i.radius/2-4)<event.y:
+                i.select(changedX,changedY)
+                break
+
 
 def LButtonEvent(event):
     
     global drawEvent
+    print("x:"+str(event.x)+" y:"+str(event.y))
+    #issue button pause/resume
+    if event.y>600 or event.y<20:
+        return
     
     if drawEvent:
-        print("x:"+str(event.x)+" y:"+str(event.y))
         addAstro(event)
         drawEvent=False
         
     else:
+        selectAstro(event)
         print("can't draw")
         
 
@@ -108,7 +117,7 @@ def pauseMode():
 #main UI setup
 #tk
 tk=Tk()
-tk.title("spaceAlpha v0.3.0b1 (build 12, 20160503)")
+tk.title("spaceAlpha v0.3.0b1 (build 13, 20160503)")
 canvas=Canvas(tk, width=600, height=600)
 canvas.pack()
 tk.update()
@@ -182,6 +191,7 @@ for i in range(num):
 astro.append(Astro(canvas,12,10,600,100,changedX,changedY,-2,0,'green'))
 sun = Astro(canvas,3052000,30,0,300,changedX,changedY,4,0,'red')
 sun.select(changedX,changedY)
+astro[0].select(changedX,changedY)
 while 1:
     if not pauseEvent:
         
