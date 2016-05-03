@@ -10,11 +10,15 @@ class Astro:
         self.color=color
         self.id=canvas.create_oval(locationX-radius/2,locationY-radius/2,locationX+radius/2,locationY+radius/2,fill=color,width=0)
         self.canvas.move(self.id,canvasLocationX,canvasLocationY)
+        self.isSelected=False
+        self.isSelectedID=-1
     def draw(self):
         #print("hi"+str(self.locationX))
         self.locationX=self.locationX+self.velocityX
         self.locationY=self.locationY+self.velocityY
         self.canvas.move(self.id,self.velocityX,self.velocityY)
+        if self.isSelected:
+            self.canvas.move(self.isSelectedID,self.velocityX,self.velocityY)
         #self.canvas.create_oval(self.locationX-self.radius/2,self.locationY-self.radius/2,self.locationX+self.radius/2,self.locationY+self.radius/2,fill=self.color,width=0)
     def applyForce(self,subAstro):
         leng=(self.locationX-subAstro.locationX)**2+(self.locationY-subAstro.locationY)**2
@@ -45,3 +49,14 @@ class Astro:
         '''
         #print(forceX)
         #print(forceY)
+
+    def select(self,canvasLocationX,canvasLocationY):
+        self.isSelectedID=self.canvas.create_oval(self.locationX-self.radius/2-4,self.locationY-self.radius/2-4,self.locationX+self.radius/2+4,self.locationY+self.radius/2+4,width=2)
+        self.canvas.move(self.isSelectedID,canvasLocationX,canvasLocationY)
+        self.isSelected=True
+    def disSelect(self):
+        self.canvas.delete(self.isSelectedID)
+        self.isSelected=False
+        
+
+        
