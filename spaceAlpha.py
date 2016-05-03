@@ -18,38 +18,38 @@ def move(event):
             canvas.move(i.id,0,-10)
             if i.isSelected:
                 canvas.move(i.isSelectedID,0,-10)
-        canvas.move(sun.id,0,-10)
-        if sun.isSelected:
-            canvas.move(sun.isSelectedID,0,-10)
         changedY=changedY-10
     elif event.keysym=='Down':
         for i in astro:
             canvas.move(i.id,0,10)
             if i.isSelected:
                 canvas.move(i.isSelectedID,0,10)
-        canvas.move(sun.id,0,10)
-        if sun.isSelected:
-            canvas.move(sun.isSelectedID,0,10)
         changedY=changedY+10
     elif event.keysym=='Left':
         for i in astro:
             canvas.move(i.id,-10,0)
             if i.isSelected:
                 canvas.move(i.isSelectedID,-10,0)
-        canvas.move(sun.id,-10,0)
-        if sun.isSelected:
-            canvas.move(sun.isSelectedID,-10,0)
         changedX=changedX-10
     elif event.keysym=='Right':
         for i in astro:
             canvas.move(i.id,10,0)
             if i.isSelected:
                 canvas.move(i.isSelectedID,10,0)
-        canvas.move(sun.id,10,0)
-        if sun.isSelected:
-            canvas.move(sun.isSelectedID,10,0)
         changedX=changedX+10
 
+def isSelectedAstro(astro):
+    for i in astro:
+        if i.isSelected:
+            return [True, i]
+    return [False, 0]
+
+def findSelectedAstro(astro):
+    for i in astro:
+        if i.isSelected:
+            return [True, i]
+    return [False, 0]
+        
 
 def addAstro(event):
     global changedX
@@ -59,23 +59,28 @@ def addAstro(event):
     global weightEntry
     global eccentricityEntry
     global clockWiseEntry
-    global sun
+    sunFindCache=findSelectedAstro(astro)
     astroWeight=int(weightEntry.get())
     astroSize=int(sizeEntry.get())
-    clockWise=str(clockWiseEntry.get())
-    print(changedX)
     locationX=event.x-changedX
     locationY=event.y-changedY
-    leng=((locationX-sun.locationX)**2+(locationY-sun.locationY)**2)**0.5
-    velocity=(0.005*sun.weight/leng)**0.5
-    velocityX=-velocity*((sun.locationY-locationY))/leng
-    velocityY=velocity*((sun.locationX-locationX))/leng
-    if clockWise=="yes":
-        velocityX=-velocityX
-        velocityY=-velocityY
-    velocityX=velocityX+sun.velocityX
-    velocityY=velocityY+sun.velocityY
-    astro.append(Astro(canvas,astroWeight,astroSize,locationX,locationY,changedX,changedY,velocityX,velocityY,'orange'))
+    if sunFindCache[0]:
+        sun=sunFindCache[1]
+        clockWise=str(clockWiseEntry.get())
+        print(changedX)
+        leng=((locationX-sun.locationX)**2+(locationY-sun.locationY)**2)**0.5
+        velocity=(0.005*sun.weight/leng)**0.5
+        velocityX=-velocity*((sun.locationY-locationY))/leng
+        velocityY=velocity*((sun.locationX-locationX))/leng
+        if clockWise=="yes":
+            velocityX=-velocityX
+            velocityY=-velocityY
+        velocityX=velocityX+sun.velocityX
+        velocityY=velocityY+sun.velocityY
+        astro.append(Astro(canvas,astroWeight,astroSize,locationX,locationY,changedX,changedY,velocityX,velocityY,'orange'))
+    else:
+        astro.append(Astro(canvas,astroWeight,astroSize,locationX,locationY,changedX,changedY,0,0,'orange'))
+        
     
 
 def selectAstro(event):
@@ -84,9 +89,9 @@ def selectAstro(event):
             i.disSelect()
     
     for i in astro:
-            if (i.locationX+changedX+i.radius/2+4)>event.x and (i.locationX+changedX-i.radius/2-4)<event.x and (i.locationY+changedY+i.radius/2+4)>event.y and (i.locationY+changedY-i.radius/2-4)<event.y:
-                i.select(changedX,changedY)
-                break
+        if (i.locationX+changedX+i.radius/2+4)>event.x and (i.locationX+changedX-i.radius/2-4)<event.x and (i.locationY+changedY+i.radius/2+4)>event.y and (i.locationY+changedY-i.radius/2-4)<event.y:
+            i.select(changedX,changedY)
+            break
 
 
 def LButtonEvent(event):
@@ -117,7 +122,7 @@ def pauseMode():
 #main UI setup
 #tk
 tk=Tk()
-tk.title("spaceAlpha v0.3.0b1 (build 13, 20160503)")
+tk.title("spaceAlpha v0.3.0b2 (build 14, 20160503)")
 canvas=Canvas(tk, width=600, height=600)
 canvas.pack()
 tk.update()
@@ -184,26 +189,29 @@ canvas.bind_all("<KeyPress-Left>",move)
 canvas.bind_all("<KeyPress-Right>",move)
 canvas.bind_all("<Button-1>",LButtonEvent)
 
+
+#sample1 solar system
 '''
 for i in range(num):
     astro.append(Astro(canvas,62,10,300,200-17*i,changedX,changedY,2.7*(-1)**i,0,'green'))
+
+astro.append(Astro(canvas,152000,30,300,300,changedX,changedY,0,0,'red'))
 '''
+#sample2 swingby
+'''
+astro.append(Astro(canvas,3052000,30,0,300,changedX,changedY,4,0,'red'))
 astro.append(Astro(canvas,12,10,600,100,changedX,changedY,-2,0,'green'))
-sun = Astro(canvas,3052000,30,0,300,changedX,changedY,4,0,'red')
-sun.select(changedX,changedY)
-astro[0].select(changedX,changedY)
+'''
+#astro.append(Astro(canvas,15200000,30,300,300,changedX,changedY,0,0,'red'))
+
 while 1:
+    
     if not pauseEvent:
-        
         for i in astro:
             for j in astro:
                 if i!=j:
                     i.applyForce(j)
-            i.applyForce(sun)
             i.draw()
-    
-        for i in astro:
-            sun.applyForce(i)
-        sun.draw()
+
     tk.update()
     #time.sleep(1/60)
