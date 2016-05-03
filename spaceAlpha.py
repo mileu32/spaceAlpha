@@ -122,7 +122,7 @@ def pauseMode():
 #main UI setup
 #tk
 tk=Tk()
-tk.title("spaceAlpha v0.3.0b2 (build 14, 20160503)")
+tk.title("spaceAlpha v0.3.0b2 (build 15, 20160503)")
 canvas=Canvas(tk, width=600, height=600)
 canvas.pack()
 tk.update()
@@ -131,7 +131,34 @@ tk.update()
 def NewFile():
     print ("New File!")
 def OpenFile():
+    global canvas
     name = filedialog.askopenfilename(initialdir = expanduser('~')+"/Documents/spaceAlpha",filetypes = (("mileu files","*.ml"),("all files","*.*")))
+    dataFile=open(name,'r')
+    #checkFileType
+    fileFormatCheck = dataFile.readline()
+    
+    if not fileFormatCheck.strip()=="spaceAlpha:0.3.0":
+        dataFile.close()
+        print("ERROR(1)! Incorrect file format.")
+        return
+    canvasLocationX = dataFile.readline()
+    canvasLocationY = dataFile.readline()
+
+    if canvasLocationX==None or canvasLocationY==None:
+        dataFile.close()
+        print("ERROR(2)! Incorrect file format.")
+        return
+    #C.L.X. = canvsLocationX
+    CLX=int(canvasLocationX.split(':')[1])
+    CLY=int(canvasLocationY.split(':')[1])
+    while True:
+        dataFileLineCache = dataFile.readline()
+        if not dataFileLineCache: break
+        #D.F.L.C. = DataFileLineCache
+        DFLC=dataFileLineCache.strip().split(':')
+        astro.append(Astro(canvas,int(DFLC[0]),int(DFLC[1]),int(DFLC[2])+CLX,int(DFLC[3])+CLY,changedX,changedY,int(DFLC[4]),int(DFLC[5]),str(DFLC[6])))
+        print(dataFileLineCache)
+    dataFile.close()
     print (name)
 def About():
     print ("This is a simple example of a menu")
