@@ -65,8 +65,8 @@ def addAstro(event):
     global eccentricityEntry
     global clockWiseEntry
     sunFindCache=findSelectedAstro(astro)
-    astroWeight=int(weightEntry.get())
-    astroSize=int(sizeEntry.get())
+    astroWeight=float(weightEntry.get())
+    astroSize=float(sizeEntry.get())
     locationX=event.x-changedX
     locationY=event.y-changedY
     if sunFindCache[0]:
@@ -127,7 +127,7 @@ def pauseMode():
 #main UI setup
 #tk
 tk=Tk()
-tk.title("spaceAlpha v0.3.0b2 (build 16, 20160504)")
+tk.title("spaceAlpha v0.3.0b3 (build 17, 20160504)")
 canvas=Canvas(tk, width=600, height=600)
 canvas.pack()
 tk.update()
@@ -137,7 +137,33 @@ def NewFile():
     print ("New File!")
     clearAllAstro()
     pauseEvent=True
+
+def SaveAsFile():
+    print ("Save File!")
+    global canvas
+    global tk
+    global astro
+    global changedX
+    global changedY
+
+    dataFile = filedialog.asksaveasfile(mode='w',initialdir = expanduser('~')+"/Documents/spaceAlpha",defaultextension=".ml")
+
+    # asksaveasfile return `None` if dialog closed with "cancel".
+    if dataFile is None:
+        return
+
+    '''
+    #setup tk title
+    fileName=dataFile.split("/")[-1]
+    tk.title("spaceAlpha v0.3.0b3 - "+fileName)
+    '''
     
+    dataFile.write("spaceAlpha:0.3.0\ncanvasLocationX:0\ncanvasLocationY:0")
+    for i in astro:
+        dataFile.write("\n"+str(i.weight)+":"+str(i.radius)+":"+str(i.locationX+changedX)+":"+str(i.locationY+changedY)+":"+str(i.velocityX)+":"+str(i.velocityY)+":"+str(i.color))
+    dataFile.close()
+    
+
 def OpenFile():
     global canvas
     global tk
@@ -161,20 +187,20 @@ def OpenFile():
 
     #setup tk title
     fileName=name.split("/")[-1]
-    tk.title("spaceAlpha v0.3.0b2 - "+fileName)
+    tk.title("spaceAlpha v0.3.0b3 - "+fileName)
     #setup before open file
     clearAllAstro()
     pauseEvent=True
     
     #C.L.X. = canvsLocationX
-    CLX=int(canvasLocationX.split(':')[1])
-    CLY=int(canvasLocationY.split(':')[1])
+    CLX=float(canvasLocationX.split(':')[1])
+    CLY=float(canvasLocationY.split(':')[1])
     while True:
         dataFileLineCache = dataFile.readline()
         if not dataFileLineCache: break
         #D.F.L.C. = DataFileLineCache
         DFLC=dataFileLineCache.strip().split(':')
-        astro.append(Astro(canvas,int(DFLC[0]),int(DFLC[1]),int(DFLC[2])+CLX,int(DFLC[3])+CLY,changedX,changedY,int(DFLC[4]),int(DFLC[5]),str(DFLC[6])))
+        astro.append(Astro(canvas,float(DFLC[0]),float(DFLC[1]),float(DFLC[2])+CLX,float(DFLC[3])+CLY,changedX,changedY,float(DFLC[4]),float(DFLC[5]),str(DFLC[6])))
         print(dataFileLineCache)
     dataFile.close()
     print (name)
@@ -187,6 +213,7 @@ tk.config(menu=menu)
 filemenu = Menu(menu)
 menu.add_cascade(label="File", menu=filemenu)
 filemenu.add_command(label="New", command=NewFile)
+filemenu.add_command(label="Save As...", command=SaveAsFile)
 filemenu.add_command(label="Open...", command=OpenFile)
 filemenu.add_separator()
 filemenu.add_command(label="Exit", command=canvas.quit)
