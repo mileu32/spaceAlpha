@@ -50,7 +50,12 @@ def findSelectedAstro(astro):
             return [True, i]
     return [False, 0]
         
-
+def clearAllAstro():
+    global astro
+    for i in astro:
+        i.remove()
+        del i
+        
 def addAstro(event):
     global changedX
     global changedY
@@ -122,7 +127,7 @@ def pauseMode():
 #main UI setup
 #tk
 tk=Tk()
-tk.title("spaceAlpha v0.3.0b2 (build 15, 20160503)")
+tk.title("spaceAlpha v0.3.0b2 (build 16, 20160504)")
 canvas=Canvas(tk, width=600, height=600)
 canvas.pack()
 tk.update()
@@ -130,10 +135,15 @@ tk.update()
 #tk>menu
 def NewFile():
     print ("New File!")
+    clearAllAstro()
+    pauseEvent=True
+    
 def OpenFile():
     global canvas
+    global tk
     name = filedialog.askopenfilename(initialdir = expanduser('~')+"/Documents/spaceAlpha",filetypes = (("mileu files","*.ml"),("all files","*.*")))
     dataFile=open(name,'r')
+    
     #checkFileType
     fileFormatCheck = dataFile.readline()
     
@@ -143,11 +153,19 @@ def OpenFile():
         return
     canvasLocationX = dataFile.readline()
     canvasLocationY = dataFile.readline()
-
+    
     if canvasLocationX==None or canvasLocationY==None:
         dataFile.close()
         print("ERROR(2)! Incorrect file format.")
         return
+
+    #setup tk title
+    fileName=name.split("/")[-1]
+    tk.title("spaceAlpha v0.3.0b2 - "+fileName)
+    #setup before open file
+    clearAllAstro()
+    pauseEvent=True
+    
     #C.L.X. = canvsLocationX
     CLX=int(canvasLocationX.split(':')[1])
     CLY=int(canvasLocationY.split(':')[1])
@@ -160,6 +178,7 @@ def OpenFile():
         print(dataFileLineCache)
     dataFile.close()
     print (name)
+    
 def About():
     print ("This is a simple example of a menu")
 

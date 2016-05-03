@@ -49,7 +49,11 @@ class Astro:
         '''
         #print(forceX)
         #print(forceY)
-
+    def remove(self):
+        if self.isSelected:
+            self.canvas.delete(self.isSelectedID)
+        self.canvas.delete(self.id)
+        
     def select(self,canvasLocationX,canvasLocationY):
         self.isSelectedID=self.canvas.create_oval(self.locationX-self.radius/2-4,self.locationY-self.radius/2-4,self.locationX+self.radius/2+4,self.locationY+self.radius/2+4,width=2)
         self.canvas.move(self.isSelectedID,canvasLocationX,canvasLocationY)
