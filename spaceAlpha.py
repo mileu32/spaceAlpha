@@ -1,5 +1,6 @@
 from tkinter import *
 from Astro import *
+from spaceShip import *
 import time
 
 drawEvent=False
@@ -74,7 +75,7 @@ def pauseMode():
     pauseEvent=not pauseEvent
 
 tk=Tk()
-tk.title("spaceAlpha v0.2.0b2 (build 9, 20160503)")
+tk.title("spaceAlpha v0.3.0b1 (build 11, 20160503)")
 canvas=Canvas(tk, width=600, height=600)
 canvas.pack()
 tk.update()
@@ -110,18 +111,19 @@ resumeButton=Button(tk,text="pause/resume",command=pauseMode)
 resumeButton.pack(side="right")
 
 astro=[]
-num=3
+num=1
 
 canvas.bind_all("<KeyPress-Up>",move)
 canvas.bind_all("<KeyPress-Down>",move)
 canvas.bind_all("<KeyPress-Left>",move)
 canvas.bind_all("<KeyPress-Right>",move)
 canvas.bind_all("<Button-1>",addAstro)
-
+'''
 for i in range(num):
     astro.append(Astro(canvas,62,10,300,200-17*i,changedX,changedY,2.7*(-1)**i,0,'green'))
-
-sun = Astro(canvas,152000,30,300,300,changedX,changedY,0,0,'red')
+'''
+astro.append(Astro(canvas,12,10,600,100,changedX,changedY,-2,0,'green'))
+sun = Astro(canvas,3052000,30,0,300,changedX,changedY,4,0,'red')
 
 while 1:
     if not pauseEvent:
