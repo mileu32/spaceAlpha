@@ -52,9 +52,10 @@ def findSelectedAstro(astro):
         
 def clearAllAstro():
     global astro
-    for i in astro:
-        i.remove()
-        del i
+
+    while len(astro)>0:
+        astro[0].remove()
+        del astro[0]
         
 def addAstro(event):
     global changedX
@@ -127,7 +128,7 @@ def pauseMode():
 #main UI setup
 #tk
 tk=Tk()
-tk.title("spaceAlpha v0.3.0b3 (build 17, 20160504)")
+tk.title("spaceAlpha v0.3.0b3 (build 18, 20160504)")
 canvas=Canvas(tk, width=600, height=600)
 canvas.pack()
 tk.update()
@@ -278,7 +279,7 @@ astro.append(Astro(canvas,12,10,600,100,changedX,changedY,-2,0,'green'))
 #astro.append(Astro(canvas,15200000,30,300,300,changedX,changedY,0,0,'red'))
 
 while 1:
-    
+
     if not pauseEvent:
         for i in astro:
             for j in astro:
