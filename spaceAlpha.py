@@ -7,6 +7,9 @@ import time
 
 drawEvent=False
 pauseEvent=True
+lockEvent=False
+canvasWidth=700
+canvasHeight=700
 changedX=0
 changedY=0
 
@@ -128,16 +131,18 @@ def pauseMode():
 #main UI setup
 #tk
 tk=Tk()
-tk.title("spaceAlpha v0.3.0b3 (build 18, 20160504)")
-canvas=Canvas(tk, width=600, height=600)
+tk.title("spaceAlpha v1.0.0 (build 19, 20160505)")
+canvas=Canvas(tk, width=canvasWidth, height=canvasHeight)
 canvas.pack()
 tk.update()
 
 #tk>menu
 def NewFile():
+    global tk
     print ("New File!")
     clearAllAstro()
     pauseEvent=True
+    tk.title("spaceAlpha v1.0.0 (build 19, 20160505)")
 
 def SaveAsFile():
     print ("Save File!")
@@ -147,7 +152,7 @@ def SaveAsFile():
     global changedX
     global changedY
 
-    dataFile = filedialog.asksaveasfile(mode='w',initialdir = expanduser('~')+"/Documents/spaceAlpha",defaultextension=".ml")
+    dataFile = filedialog.asksaveasfile(mode='w',initialdir = expanduser('~')+"/Documents/spaceAlpha/sample",defaultextension=".ml")
 
     # asksaveasfile return `None` if dialog closed with "cancel".
     if dataFile is None:
@@ -156,7 +161,7 @@ def SaveAsFile():
     '''
     #setup tk title
     fileName=dataFile.split("/")[-1]
-    tk.title("spaceAlpha v0.3.0b3 - "+fileName)
+    tk.title("spaceAlpha v1.0.0 - "+fileName)
     '''
     
     dataFile.write("spaceAlpha:0.3.0\ncanvasLocationX:0\ncanvasLocationY:0")
@@ -168,7 +173,7 @@ def SaveAsFile():
 def OpenFile():
     global canvas
     global tk
-    name = filedialog.askopenfilename(initialdir = expanduser('~')+"/Documents/spaceAlpha",filetypes = (("mileu files","*.ml"),("all files","*.*")))
+    name = filedialog.askopenfilename(initialdir = expanduser('~')+"/Documents/spaceAlpha/sample",filetypes = (("mileu files","*.ml"),("all files","*.*")))
     dataFile=open(name,'r')
     
     #checkFileType
@@ -188,7 +193,7 @@ def OpenFile():
 
     #setup tk title
     fileName=name.split("/")[-1]
-    tk.title("spaceAlpha v0.3.0b3 - "+fileName)
+    tk.title("spaceAlpha v1.0.0 - "+fileName)
     #setup before open file
     clearAllAstro()
     pauseEvent=True
@@ -205,7 +210,37 @@ def OpenFile():
         print(dataFileLineCache)
     dataFile.close()
     print (name)
+
+#lock view to selected astro
+def ifLock():
+    global lockEvent
+    lockEvent=not lockEvent
+
+def selectViewLock():
+    cacheAstro=None
+    for i in astro:
+        if i.isSelected:
+            cacheAstro=i
+
+    if not cacheAstro:
+        return
+
+    #if using cacheAstro, then the data changed during for
+    vx=cacheAstro.velocityX
+    vy=cacheAstro.velocityY
+    lx=cacheAstro.locationX
+    ly=cacheAstro.locationY
     
+    changedX=0
+    changedY=0
+    
+    for i in astro:
+        #i.velocityX=i.velocityX-vx
+        #i.velocityY=i.velocityY-vy
+        i.locationX=i.locationX-lx+canvasWidth/2
+        i.locationY=i.locationY-ly+canvasHeight/2
+        i.redraw()
+
 def About():
     print ("This is a simple example of a menu")
 
@@ -218,6 +253,10 @@ filemenu.add_command(label="Save As...", command=SaveAsFile)
 filemenu.add_command(label="Open...", command=OpenFile)
 filemenu.add_separator()
 filemenu.add_command(label="Exit", command=canvas.quit)
+
+viewMenu = Menu(menu)
+menu.add_cascade(label="View", menu=viewMenu)
+viewMenu.add_command(label="Lock View", command=ifLock)
 
 helpmenu = Menu(menu)
 menu.add_cascade(label="Help", menu=helpmenu)
@@ -286,6 +325,9 @@ while 1:
                 if i!=j:
                     i.applyForce(j)
             i.draw()
-
+            
+    if lockEvent:
+        selectViewLock()
+    
     tk.update()
     #time.sleep(1/60)
