@@ -41,12 +41,6 @@ def move(event):
                 canvas.move(i.isSelectedID,10,0)
         changedX=changedX+10
 
-def isSelectedAstro(astro):
-    for i in astro:
-        if i.isSelected:
-            return [True, i]
-    return [False, 0]
-
 def findSelectedAstro(astro):
     for i in astro:
         if i.isSelected:
@@ -131,7 +125,7 @@ def pauseMode():
 #main UI setup
 #tk
 tk=Tk()
-tk.title("spaceAlpha v1.0.0 (build 19, 20160505)")
+tk.title("spaceAlpha v1.0.0 (build 20, 20160505)")
 canvas=Canvas(tk, width=canvasWidth, height=canvasHeight)
 canvas.pack()
 tk.update()
@@ -142,7 +136,7 @@ def NewFile():
     print ("New File!")
     clearAllAstro()
     pauseEvent=True
-    tk.title("spaceAlpha v1.0.0 (build 19, 20160505)")
+    tk.title("spaceAlpha v1.0.0 (build 20, 20160505)")
 
 def SaveAsFile():
     print ("Save File!")
