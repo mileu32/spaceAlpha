@@ -263,16 +263,19 @@ def About():
 
 #setup color of background and astro
 def setBackgroundColor_black():
+    global backgroundColor
     global canvas
     backgroundColor='black'
     canvas.config(background=backgroundColor)
 
 def setBackgroundColor_snow():
+    global backgroundColor
     global canvas
     backgroundColor='snow'
     canvas.config(background=backgroundColor)
 
 def setBackgroundColor_cyan():
+    global backgroundColor
     global canvas
     backgroundColor='cyan'
     canvas.config(background=backgroundColor)
