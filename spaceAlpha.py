@@ -115,9 +115,6 @@ def LButtonEvent(event):
     
     global drawEvent
     print("x:"+str(event.x)+" y:"+str(event.y))
-    #issue button pause/resume
-    if event.y>600 or event.y<20:
-        return
     
     if drawEvent:
         addAstro(event)
@@ -144,6 +141,10 @@ tk.title(versionGet+' (build '+buildGet+', '+buildDateGet+')')
 canvas=Canvas(tk, width=canvasWidth, height=canvasHeight)
 canvas.pack()
 tk.update()
+
+menuTk=Tk()
+menuTk.title('Options')
+menuTk.update()
 
 #tk>menu
 def NewFile():
@@ -435,36 +436,38 @@ helpmenu = Menu(menu)
 menu.add_cascade(label="Help", menu=helpmenu)
 helpmenu.add_command(label="About...", command=About)
 
-#under option
-sizeLabel=Label(tk,text="size")
-sizeLabel.pack(side="left")
-sizeEntry=Entry(tk,width=3,justify=CENTER)
+#option panel
+
+sizeLabel=Label(menuTk,text="size")
+sizeLabel.grid(row=0, column=0)
+sizeEntry=Entry(menuTk,width=10,justify=CENTER)
 sizeEntry.insert(INSERT,"20")
-sizeEntry.pack(side="left")
+sizeEntry.grid(row=0, column=1)
 
-weightLabel=Label(tk,text="weight")
-weightLabel.pack(side="left")
-weightEntry=Entry(tk,width=3,justify=CENTER)
+weightLabel=Label(menuTk,text="weight")
+weightLabel.grid(row=1, column=0)
+weightEntry=Entry(menuTk,width=10,justify=CENTER)
 weightEntry.insert(INSERT,"100")
-weightEntry.pack(side="left")
+weightEntry.grid(row=1, column=1)
 
-eccentricityLabel=Label(tk,text="eccentricity")
-eccentricityLabel.pack(side="left")
-eccentricityEntry=Entry(tk,width=3,justify=CENTER)
+eccentricityLabel=Label(menuTk,text="eccentricity")
+eccentricityLabel.grid(row=2, column=0)
+eccentricityEntry=Entry(menuTk,width=10,justify=CENTER)
 eccentricityEntry.insert(INSERT,"0")
-eccentricityEntry.pack(side="left")
+eccentricityEntry.grid(row=2, column=1)
 
-clockWiseLabel=Label(tk,text="clockWise")
-clockWiseLabel.pack(side="left")
-clockWiseEntry=Entry(tk,width=3,justify=CENTER)
+clockWiseLabel=Label(menuTk,text="clockWise")
+clockWiseLabel.grid(row=3, column=0)
+clockWiseEntry=Entry(menuTk,width=10,justify=CENTER)
 clockWiseEntry.insert(INSERT,"yes")
-clockWiseEntry.pack(side="left")
+clockWiseEntry.grid(row=3, column=1)
 
-drawButton=Button(tk,text="draw",command=addAstroMode)
-drawButton.pack(side="left")
 
-resumeButton=Button(tk,text="pause/resume",command=pauseMode)
-resumeButton.pack(side="right")
+drawButton=Button(menuTk,text="draw",command=addAstroMode)
+drawButton.grid(row=4, column=0)
+
+resumeButton=Button(menuTk,text="pause/resume",command=pauseMode)
+resumeButton.grid(row=4, column=1)
 
 astro=[]
 num=1
