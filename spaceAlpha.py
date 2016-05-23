@@ -8,6 +8,8 @@ import time
 drawEvent=False
 pauseEvent=True
 lockEvent=False
+backgroundColor='white'
+astroColor='orange'
 versionGet='spaceAlpha v?.?.?'
 buildGet='??'
 buildDataGet='????????'
@@ -92,9 +94,9 @@ def addAstro(event):
             velocityY=-velocityY
         velocityX=velocityX+sun.velocityX
         velocityY=velocityY+sun.velocityY
-        astro.append(Astro(canvas,astroWeight,astroSize,locationX,locationY,changedX,changedY,velocityX,velocityY,'orange'))
+        astro.append(Astro(canvas,astroWeight,astroSize,locationX,locationY,changedX,changedY,velocityX,velocityY,astroColor))
     else:
-        astro.append(Astro(canvas,astroWeight,astroSize,locationX,locationY,changedX,changedY,0,0,'orange'))
+        astro.append(Astro(canvas,astroWeight,astroSize,locationX,locationY,changedX,changedY,0,0,astroColor))
         
     
 
@@ -200,7 +202,7 @@ def OpenFile():
 
     #setup tk title
     fileName=name.split("/")[-1]
-    tk.title(versionGet" - "+fileName)
+    tk.title(versionGet+' - '+fileName)
     #setup before open file
     clearAllAstro()
     pauseEvent=True
@@ -251,6 +253,127 @@ def selectViewLock():
 def About():
     print ("This is a simple example of a menu")
 
+#setup color of background and astro
+def setBackgroundColor_black():
+    global canvas
+    backgroundColor='black'
+    canvas.config(background=backgroundColor)
+
+def setBackgroundColor_snow():
+    global canvas
+    backgroundColor='snow'
+    canvas.config(background=backgroundColor)
+
+def setBackgroundColor_cyan():
+    global canvas
+    backgroundColor='cyan'
+    canvas.config(background=backgroundColor)
+
+def setBackgroundColor_aquamarine():
+    global backgroundColor
+    global canvas
+    backgroundColor='aquamarine'
+    canvas.config(background=backgroundColor)
+
+def setBackgroundColor_lime_green():
+    global backgroundColor
+    global canvas
+    backgroundColor='lime green'
+    canvas.config(background=backgroundColor)
+
+def setBackgroundColor_yellow():
+    global backgroundColor
+    global canvas
+    backgroundColor='yellow'
+    canvas.config(background=backgroundColor)
+
+def setBackgroundColor_orange():
+    global backgroundColor
+    global canvas
+    backgroundColor='orange'
+    canvas.config(background=backgroundColor)
+
+def setBackgroundColor_red():
+    global backgroundColor
+    global canvas
+    backgroundColor='red'
+    canvas.config(background=backgroundColor)
+
+def setBackgroundColor_deep_pink():
+    global backgroundColor
+    global canvas
+    backgroundColor='deep pink'
+    canvas.config(background=backgroundColor)
+
+def setBackgroundColor_purple():
+    global backgroundColor
+    global canvas
+    backgroundColor='purple'
+    canvas.config(background=backgroundColor)
+
+def setBackgroundColor_dodger_blue():
+    global backgroundColor
+    global canvas
+    backgroundColor='dodger blue'
+    canvas.config(background=backgroundColor)
+
+def setBackgroundColor_green():
+    global backgroundColor
+    global canvas
+    backgroundColor='green'
+    canvas.config(background=backgroundColor)
+
+
+
+def setAstroColor_black():
+    global astroColor
+    astroColor='black'
+
+def setAstroColor_snow():
+    global astroColor
+    astroColor='snow'
+
+def setAstroColor_cyan():
+    global astroColor
+    astroColor='cyan'
+
+def setAstroColor_aquamarine():
+    global astroColor
+    astroColor='aquamarine'
+
+def setAstroColor_lime_green():
+    global astroColor
+    astroColor='lime green'
+
+def setAstroColor_yellow():
+    global astroColor
+    astroColor='yellow'
+
+def setAstroColor_orange():
+    global astroColor
+    astroColor='orange'
+
+def setAstroColor_red():
+    global astroColor
+    astroColor='red'
+
+def setAstroColor_deep_pink():
+    global astroColor
+    astroColor='deep pink'
+
+def setAstroColor_purple():
+    global astroColor
+    astroColor='purple'
+
+def setAstroColor_dodger_blue():
+    global astroColor
+    astroColor='dodger blue'
+
+def setAstroColor_green():
+    global astroColor
+    astroColor='green'
+
+
 menu=Menu(tk)
 tk.config(menu=menu)
 filemenu = Menu(menu)
@@ -261,10 +384,46 @@ filemenu.add_command(label="Open...", command=OpenFile, accelerator="Command-O")
 filemenu.add_separator()
 filemenu.add_command(label="Exit", command=canvas.quit)
 
+#lock view menu
 viewMenu = Menu(menu)
 menu.add_cascade(label="View", menu=viewMenu)
 viewMenu.add_command(label="Lock View", command=ifLock)
 
+#set color menu
+colorMenu = Menu(menu)
+menu.add_cascade(label="Color", menu=colorMenu)
+
+backgroundColorMenu = Menu(menu)
+colorMenu.add_cascade(label="Background", menu=backgroundColorMenu)
+backgroundColorMenu.add_command(label="black", command=setBackgroundColor_black)
+backgroundColorMenu.add_command(label="snow", command=setBackgroundColor_snow)
+backgroundColorMenu.add_command(label="cyan", command=setBackgroundColor_cyan)
+backgroundColorMenu.add_command(label="aquamarine", command=setBackgroundColor_aquamarine)
+backgroundColorMenu.add_command(label="lime green", command=setBackgroundColor_lime_green)
+backgroundColorMenu.add_command(label="yellow", command=setBackgroundColor_yellow)
+backgroundColorMenu.add_command(label="orange", command=setBackgroundColor_orange)
+backgroundColorMenu.add_command(label="red", command=setBackgroundColor_red)
+backgroundColorMenu.add_command(label="deep pink", command=setBackgroundColor_deep_pink)
+backgroundColorMenu.add_command(label="purple", command=setBackgroundColor_purple)
+backgroundColorMenu.add_command(label="dodger blue", command=setBackgroundColor_dodger_blue)
+backgroundColorMenu.add_command(label="green", command=setBackgroundColor_green)
+
+astroColorMenu = Menu(menu)
+colorMenu.add_cascade(label="Astro", menu=astroColorMenu)
+astroColorMenu.add_command(label="black", command=setAstroColor_black)
+astroColorMenu.add_command(label="snow", command=setAstroColor_snow)
+astroColorMenu.add_command(label="cyan", command=setAstroColor_cyan)
+astroColorMenu.add_command(label="aquamarine", command=setAstroColor_aquamarine)
+astroColorMenu.add_command(label="lime green", command=setAstroColor_lime_green)
+astroColorMenu.add_command(label="yellow", command=setAstroColor_yellow)
+astroColorMenu.add_command(label="orange", command=setAstroColor_orange)
+astroColorMenu.add_command(label="red", command=setAstroColor_red)
+astroColorMenu.add_command(label="deep pink", command=setAstroColor_deep_pink)
+astroColorMenu.add_command(label="purple", command=setAstroColor_purple)
+astroColorMenu.add_command(label="dodger blue", command=setAstroColor_dodger_blue)
+astroColorMenu.add_command(label="green", command=setAstroColor_green)
+
+#help menu
 helpmenu = Menu(menu)
 menu.add_cascade(label="Help", menu=helpmenu)
 helpmenu.add_command(label="About...", command=About)

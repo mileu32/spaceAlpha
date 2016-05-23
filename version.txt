@@ -1,3 +1,3 @@
-spaceAlpha v1.1.0b1
-21
+spaceAlpha v1.1.0b2
+22
 20160523
