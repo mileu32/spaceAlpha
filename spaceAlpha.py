@@ -1,17 +1,29 @@
 from tkinter import *
 from os.path import expanduser
 from Astro import *
-from spaceShip import *
+from SpaceShip import *
 
 import time
 
 drawEvent=False
 pauseEvent=True
 lockEvent=False
+versionGet='spaceAlpha v?.?.?'
+buildGet='??'
+buildDataGet='????????'
 canvasWidth=700
 canvasHeight=700
 changedX=0
 changedY=0
+
+def getVersion():
+    global versionGet
+    global buildGet
+    global buildDateGet
+    versionFile=open("version.txt",'r')
+    versionGet = versionFile.readline().strip()
+    buildGet = versionFile.readline().strip()
+    buildDateGet = versionFile.readline().strip()
 
 def move(event):
     global changedX
@@ -122,10 +134,11 @@ def pauseMode():
     global pauseEvent
     pauseEvent=not pauseEvent
 
+getVersion()
 #main UI setup
 #tk
 tk=Tk()
-tk.title("spaceAlpha v1.0.0 (build 20, 20160505)")
+tk.title(versionGet+' (build '+buildGet+', '+buildDateGet+')')
 canvas=Canvas(tk, width=canvasWidth, height=canvasHeight)
 canvas.pack()
 tk.update()
@@ -136,7 +149,7 @@ def NewFile():
     print ("New File!")
     clearAllAstro()
     pauseEvent=True
-    tk.title("spaceAlpha v1.0.0 (build 20, 20160505)")
+    tk.title(versionGet+' (build '+buildGet+', '+buildDateGet+')')
 
 def SaveAsFile():
     print ("Save File!")
@@ -146,7 +159,7 @@ def SaveAsFile():
     global changedX
     global changedY
 
-    dataFile = filedialog.asksaveasfile(mode='w',initialdir = expanduser('~')+"/Documents/spaceAlpha/sample",defaultextension=".ml")
+    dataFile = filedialog.asksaveasfile(mode='w',initialdir = "/sample",defaultextension=".ml")
 
     # asksaveasfile return `None` if dialog closed with "cancel".
     if dataFile is None:
@@ -155,7 +168,7 @@ def SaveAsFile():
     '''
     #setup tk title
     fileName=dataFile.split("/")[-1]
-    tk.title("spaceAlpha v1.0.0 - "+fileName)
+    tk.title(versionGet+" - "+fileName)
     '''
     
     dataFile.write("spaceAlpha:0.3.0\ncanvasLocationX:0\ncanvasLocationY:0")
@@ -167,7 +180,7 @@ def SaveAsFile():
 def OpenFile():
     global canvas
     global tk
-    name = filedialog.askopenfilename(initialdir = expanduser('~')+"/Documents/spaceAlpha/sample",filetypes = (("mileu files","*.ml"),("all files","*.*")))
+    name = filedialog.askopenfilename(initialdir = "/sample",filetypes = (("mileu files","*.ml"),("all files","*.*")))
     dataFile=open(name,'r')
     
     #checkFileType
@@ -187,7 +200,7 @@ def OpenFile():
 
     #setup tk title
     fileName=name.split("/")[-1]
-    tk.title("spaceAlpha v1.0.0 - "+fileName)
+    tk.title(versionGet" - "+fileName)
     #setup before open file
     clearAllAstro()
     pauseEvent=True
@@ -242,9 +255,9 @@ menu=Menu(tk)
 tk.config(menu=menu)
 filemenu = Menu(menu)
 menu.add_cascade(label="File", menu=filemenu)
-filemenu.add_command(label="New", command=NewFile)
-filemenu.add_command(label="Save As...", command=SaveAsFile)
-filemenu.add_command(label="Open...", command=OpenFile)
+filemenu.add_command(label="New", command=NewFile, accelerator="Command-N")
+filemenu.add_command(label="Save As...", command=SaveAsFile, accelerator="Command-S")
+filemenu.add_command(label="Open...", command=OpenFile, accelerator="Command-O")
 filemenu.add_separator()
 filemenu.add_command(label="Exit", command=canvas.quit)
 
@@ -260,13 +273,13 @@ helpmenu.add_command(label="About...", command=About)
 sizeLabel=Label(tk,text="size")
 sizeLabel.pack(side="left")
 sizeEntry=Entry(tk,width=3,justify=CENTER)
-sizeEntry.insert(INSERT,"10")
+sizeEntry.insert(INSERT,"20")
 sizeEntry.pack(side="left")
 
 weightLabel=Label(tk,text="weight")
 weightLabel.pack(side="left")
 weightEntry=Entry(tk,width=3,justify=CENTER)
-weightEntry.insert(INSERT,"10")
+weightEntry.insert(INSERT,"100")
 weightEntry.pack(side="left")
 
 eccentricityLabel=Label(tk,text="eccentricity")
@@ -290,12 +303,15 @@ resumeButton.pack(side="right")
 astro=[]
 num=1
 
+#command key binding doesn't work well
+canvas.bind_all("<Meta-N>", NewFile)
+canvas.bind_all("<Meta-S>", SaveAsFile)
+canvas.bind_all("<Meta-O>", OpenFile)
 canvas.bind_all("<KeyPress-Up>",move)
 canvas.bind_all("<KeyPress-Down>",move)
 canvas.bind_all("<KeyPress-Left>",move)
 canvas.bind_all("<KeyPress-Right>",move)
 canvas.bind_all("<Button-1>",LButtonEvent)
-
 
 #sample1 solar system
 '''
@@ -312,7 +328,6 @@ astro.append(Astro(canvas,12,10,600,100,changedX,changedY,-2,0,'green'))
 #astro.append(Astro(canvas,15200000,30,300,300,changedX,changedY,0,0,'red'))
 
 while 1:
-
     if not pauseEvent:
         for i in astro:
             for j in astro:

@@ -1,4 +1,4 @@
-class spaceShip:
+class SpaceShip:
     def __init__(self,canvas,astro,weight,radian,canvasLocationX,canvasLocationY,velocity,color):
         self.canvas=canvas
         self.weight=weight
