@@ -1,4 +1,5 @@
-spaceAlpha:0.3.0
+spaceAlpha:1.1.0
+canvasColor:white
 canvasLocationX:0
 canvasLocationY:0
 1000000.0:20.0:47:333:1:0:red

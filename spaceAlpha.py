@@ -157,6 +157,7 @@ def SaveAsFile():
     print ("Save File!")
     global canvas
     global tk
+    global backgroundColor
     global astro
     global changedX
     global changedY
@@ -173,7 +174,7 @@ def SaveAsFile():
     tk.title(versionGet+" - "+fileName)
     '''
     
-    dataFile.write("spaceAlpha:0.3.0\ncanvasLocationX:0\ncanvasLocationY:0")
+    dataFile.write("spaceAlpha:1.1.0\ncanvasColor:"+backgroundColor+"\ncanvasLocationX:0\ncanvasLocationY:0")
     for i in astro:
         dataFile.write("\n"+str(i.weight)+":"+str(i.radius)+":"+str(i.locationX+changedX)+":"+str(i.locationY+changedY)+":"+str(i.velocityX)+":"+str(i.velocityY)+":"+str(i.color))
     dataFile.close()
@@ -182,20 +183,23 @@ def SaveAsFile():
 def OpenFile():
     global canvas
     global tk
+    global backgroundColor
     name = filedialog.askopenfilename(initialdir = "/sample",filetypes = (("mileu files","*.ml"),("all files","*.*")))
     dataFile=open(name,'r')
     
     #checkFileType
     fileFormatCheck = dataFile.readline()
     
-    if not fileFormatCheck.strip()=="spaceAlpha:0.3.0":
+    if not fileFormatCheck.strip()=="spaceAlpha:1.1.0":
         dataFile.close()
         print("ERROR(1)! Incorrect file format.")
         return
+
+    canvasColor = dataFile.readline()
     canvasLocationX = dataFile.readline()
     canvasLocationY = dataFile.readline()
     
-    if canvasLocationX==None or canvasLocationY==None:
+    if canvasColor==None or canvasLocationX==None or canvasLocationY==None:
         dataFile.close()
         print("ERROR(2)! Incorrect file format.")
         return
@@ -206,10 +210,13 @@ def OpenFile():
     #setup before open file
     clearAllAstro()
     pauseEvent=True
+    backgroundColor=canvasColor.split(':')[1].strip()
+    canvas.config(background=backgroundColor)
     
     #C.L.X. = canvsLocationX
     CLX=float(canvasLocationX.split(':')[1])
     CLY=float(canvasLocationY.split(':')[1])
+    
     while True:
         dataFileLineCache = dataFile.readline()
         if not dataFileLineCache: break
