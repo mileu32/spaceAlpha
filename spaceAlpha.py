@@ -12,7 +12,7 @@ backgroundColor='white'
 astroColor='orange'
 versionGet='spaceAlpha v?.?.?'
 buildGet='??'
-buildDataGet='????????'
+buildDateGet='????????'
 canvasWidth=700
 canvasHeight=700
 changedX=0
@@ -60,7 +60,13 @@ def findSelectedAstro(astro):
         if i.isSelected:
             return [True, i]
     return [False, 0]
-        
+
+def clearSelectedAstro():
+    global astro
+    for i in astro:
+        if i.isSelected:
+            i.remove()
+
 def clearAllAstro():
     global astro
 
@@ -465,12 +471,17 @@ clockWiseEntry=Entry(menuTk,width=10,justify=CENTER)
 clockWiseEntry.insert(INSERT,"yes")
 clockWiseEntry.grid(row=3, column=1)
 
-
 drawButton=Button(menuTk,text="draw",command=addAstroMode)
 drawButton.grid(row=4, column=0)
 
 resumeButton=Button(menuTk,text="pause/resume",command=pauseMode)
 resumeButton.grid(row=4, column=1)
+
+deleteButton=Button(menuTk,text="delete",command=clearSelectedAstro)
+deleteButton.grid(row=5, column=0)
+
+clearButton=Button(menuTk,text="clear all",command=clearAllAstro)
+clearButton.grid(row=5, column=1)
 
 astro=[]
 num=1
