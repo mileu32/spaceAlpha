@@ -66,6 +66,7 @@ def clearSelectedAstro():
     for i in astro:
         if i.isSelected:
             i.remove()
+            del astro[astro.index(i)]
 
 def clearAllAstro():
     global astro
