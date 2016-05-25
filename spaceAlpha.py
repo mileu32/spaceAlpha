@@ -88,6 +88,7 @@ def addAstro(event):
     astroSize=float(sizeEntry.get())
     locationX=event.x-changedX
     locationY=event.y-changedY
+    eccentricity=float(eccentricityEntry.get())
     if sunFindCache[0]:
         sun=sunFindCache[1]
         clockWise=str(clockWiseEntry.get())
@@ -131,6 +132,12 @@ def LButtonEvent(event):
         selectAstro(event)
         print("can't draw")
         
+def RButtonEvent(event):
+    print("right mouse clicked")
+
+def MouseWheelEvent(event):
+    print("mouse wheel event")
+    print(event.delta)
 
 def addAstroMode():
     global drawEvent
@@ -496,6 +503,8 @@ canvas.bind_all("<KeyPress-Down>",move)
 canvas.bind_all("<KeyPress-Left>",move)
 canvas.bind_all("<KeyPress-Right>",move)
 canvas.bind_all("<Button-1>",LButtonEvent)
+canvas.bind_all("<Button-2>",RButtonEvent)
+canvas.bind_all("<MouseWheel>",MouseWheelEvent)
 
 #sample1 solar system
 '''
